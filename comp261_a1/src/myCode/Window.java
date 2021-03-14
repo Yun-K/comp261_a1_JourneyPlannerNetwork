@@ -120,7 +120,7 @@ public class Window extends GUI {
 
             }
 
-            // close the BufferReader and releases the resourses assoiate with it
+            // close the BufferedReader and releases the resourses assoiate with it
             bReader.close();
         } catch (Exception e) {
             // TODO: handle exception
@@ -175,13 +175,24 @@ public class Window extends GUI {
                         break;
                     }
 
-                    // assign the Stop objects and construct the approiate Connection
-                    // object
+                    // assign the Stop objects and
+                    // construct the approiate Connection object
                     Stop fromStop = id_stops_map.get(stopSequence.get(i));
                     Stop toStop = id_stops_map.get(stopSequence.get(i + 1));
                     Connection connection = new Connection(trip_id, fromStop, toStop);
                     // add it into the field
                     this.all_connections.add(connection);
+
+                    // assign the outgoing and incoming Adjacent Connections to the Stop
+                    // objects
+                    List<Connection> outgoing_list = fromStop.getAdj_outgoingConnections();
+                    outgoing_list.add(connection);
+                    fromStop.setAdj_outgoingConnections(outgoing_list);
+
+                    List<Connection> incoming_list = toStop.getAdj_incomingConnections();
+                    incoming_list.add(connection);
+                    toStop.setAdj_incomingConnections(incoming_list);
+
                 }
 
                 Trip trip = new Trip(trip_id, stopSequence);
@@ -189,7 +200,7 @@ public class Window extends GUI {
 
             }
 
-            // close the BufferReader and releases the resourses assoiate with it
+            // close the BufferedReader and releases the resourses assoiate with it
             bReader.close();
         } catch (Exception e) {
             // TODO: handle exception

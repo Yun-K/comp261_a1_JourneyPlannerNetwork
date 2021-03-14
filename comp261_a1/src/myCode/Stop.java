@@ -1,6 +1,9 @@
 package myCode;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import codeResource.Location;
 
 /**
  * Description: <br/>
@@ -22,14 +25,12 @@ public class Stop {
     private String stop_name;
 
     /**
-     * the latitude of the stop.
+     * the latitude and the longitude of the stop.
      */
-    private double stop_lat;
+    private double stop_lat, stop_lon;
 
-    /**
-     * the longitude of the stop.
-     */
-    private double stop_lon;
+    /** the location of the Stop object */
+    private Location location;
 
     /** a list of Connections for storing outgoing and incoming Connections */
     @SuppressWarnings("javadoc")
@@ -48,10 +49,41 @@ public class Stop {
      *            the longitude of the stop.
      */
     public Stop(String stop_id, String stop_name, double stop_lat, double stop_lon) {
+        // for assign to fields directly
         this.stop_id = stop_id;
         this.stop_name = stop_name;
         this.stop_lat = stop_lat;
         this.stop_lon = stop_lon;
+
+        // for others
+        location = Location.newFromLatLon(stop_lat, stop_lon);
+        adj_incomingConnections = new ArrayList<Connection>();
+        adj_outgoingConnections = new ArrayList<Connection>();
+
+    }
+
+    public void drawStop() {
+        // TODO Auto-generated method stub
+
+    }
+
+    /**
+     * Get the location.
+     *
+     * @return the location
+     */
+    public Location getLocation() {
+        return location;
+    }
+
+    /**
+     * Set the location.
+     *
+     * @param location
+     *            the location to set
+     */
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     /**
@@ -64,32 +96,12 @@ public class Stop {
     }
 
     /**
-     * Set the adj_outgoingConnections.
-     *
-     * @param adj_outgoingConnections
-     *            the adj_outgoingConnections to set
-     */
-    public void setAdj_outgoingConnections(List<Connection> adj_outgoingConnections) {
-        this.adj_outgoingConnections = adj_outgoingConnections;
-    }
-
-    /**
      * Get the adj_incomingConnections.
      *
      * @return the adj_incomingConnections
      */
     public List<Connection> getAdj_incomingConnections() {
         return adj_incomingConnections;
-    }
-
-    /**
-     * Set the adj_incomingConnections.
-     *
-     * @param adj_incomingConnections
-     *            the adj_incomingConnections to set
-     */
-    public void setAdj_incomingConnections(List<Connection> adj_incomingConnections) {
-        this.adj_incomingConnections = adj_incomingConnections;
     }
 
     /**
@@ -166,6 +178,26 @@ public class Stop {
      */
     public void setStop_lon(double stop_lon) {
         this.stop_lon = stop_lon;
+    }
+
+    /**
+     * Set the adj_outgoingConnections.
+     *
+     * @param adj_outgoingConnections
+     *            the adj_outgoingConnections to set
+     */
+    public void setAdj_outgoingConnections(List<Connection> adj_outgoingConnections) {
+        this.adj_outgoingConnections = adj_outgoingConnections;
+    }
+
+    /**
+     * Set the adj_incomingConnections.
+     *
+     * @param adj_incomingConnections
+     *            the adj_incomingConnections to set
+     */
+    public void setAdj_incomingConnections(List<Connection> adj_incomingConnections) {
+        this.adj_incomingConnections = adj_incomingConnections;
     }
 
     /**

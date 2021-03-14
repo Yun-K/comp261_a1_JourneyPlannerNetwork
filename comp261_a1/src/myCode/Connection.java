@@ -45,6 +45,9 @@ public class Connection {
 
     }
 
+    public void drawConnection() {
+    }
+
     /**
      * Get the fromStop.
      *
