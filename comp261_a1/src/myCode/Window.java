@@ -1,10 +1,12 @@
 package myCode;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import codeResource.GUI;
+import codeResource.Location;
 
 /**
  * Description: <br/>
@@ -22,33 +25,45 @@ import codeResource.GUI;
  */
 public class Window extends GUI {
 
+    private static final double SCALE = 44;
+
     /**
      * each id map to the assosiated Stop object
      */
-    static Map<String, Stop> id_stops_map;
+    public static Map<String, Stop> id_stops_map;
 
     /**
      * each id map to the assosiated trip object
      */
-    static Map<String, Trip> id_trips_map;
+    public static Map<String, Trip> id_trips_map;
 
     /** for storing all connections between all stops */
-    private List<Connection> all_connections;
+    public static List<Connection> all_connections;
 
-    /**
-     * A constructor. It construct a new instance of Window.
-     *
-     */
-    public Window() {
-        super();
+    private Location origion_location;
+
+    static {
         id_stops_map = new HashMap<String, Stop>();
         id_trips_map = new HashMap<String, Trip>();
-
+        all_connections = new ArrayList<Connection>();
     }
 
     @Override
     protected void redraw(Graphics g) {
-        // TODO Auto-generated method stub
+
+        // calculate the origional location and assign it
+        // this.origation_location = new Location(calculateOrigion()[0],
+        // calculateOrigion()[1]);
+        this.origion_location = new Location(0, 0);
+        for (Stop stop : id_stops_map.values()) {
+            g.setColor(Color.BLUE);
+            stop.drawStop(g, origion_location, SCALE);
+        }
+
+        for (Connection connection : all_connections) {
+            g.setColor(Color.DARK_GRAY);
+            connection.drawConnection(g, origion_location, SCALE);
+        }
 
     }
 
@@ -72,6 +87,9 @@ public class Window extends GUI {
 
     @Override
     protected void onLoad(File stopFile, File tripFile) {
+        // id_stops_map = new HashMap<String, Stop>();
+        // id_trips_map = new HashMap<String, Trip>();
+        // all_connections = new ArrayList<Connection>();
         // call two methods to load the file
         readStopFile(stopFile);
         readTripFile(tripFile);
@@ -207,6 +225,48 @@ public class Window extends GUI {
             throw new RuntimeException("The file has not beed read successful", e);
         }
 
+    }
+
+    /**
+     * Description: <br/>
+     * Helper method for calculating the origion value
+     * 
+     * @author Yun Zhou
+     * @return the array of the x_y value in decimal
+     */
+    private double[] calculateOrigion() {
+        // TODO Auto-generated method stub
+        double[] origionX_Y = new double[2];
+        double min_x = Double.POSITIVE_INFINITY, min_y = Double.POSITIVE_INFINITY,
+                max_x = Double.NEGATIVE_INFINITY, max_y = Double.NEGATIVE_INFINITY;
+
+        // get the minX,minY,maxX,maxY
+        for (Stop stop : id_stops_map.values()) {
+            if (stop.getLocation().x < min_x) {
+                min_x = stop.getLocation().x;
+            } else if (stop.getLocation().x > max_x) {
+                max_x = stop.getLocation().x;
+
+            }
+            if (stop.getLocation().y < min_y) {
+                min_y = stop.getLocation().y;
+            } else if (stop.getLocation().y > max_y) {
+                max_y = stop.getLocation().y;
+            }
+        }
+
+        // calculate the mid point which is the origion
+        double mid_x = min_x + ((max_x - min_x) / 2);
+        double mid_y = min_y + ((max_y - min_y) / 2);
+
+        origionX_Y[0] = mid_x;
+        origionX_Y[1] = mid_y;
+        return origionX_Y;
+
+    }
+
+    public static void main(String[] args) {
+        new Window();
     }
 
 }

@@ -1,5 +1,7 @@
 package myCode;
 
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,10 @@ import codeResource.Location;
  * @version
  */
 public class Stop {
+    /**
+     * size:the size of the Stop obect
+     */
+    private static final int SIZE = 3;
 
     /**
      * the id of the stop, it contains characters and numbers.
@@ -62,8 +68,11 @@ public class Stop {
 
     }
 
-    public void drawStop() {
+    public void drawStop(Graphics graphics, Location origionLocation, double scale) {
         // TODO Auto-generated method stub
+        Point point = location.asPoint(origionLocation, scale); // getALL point
+
+        graphics.fillRect(point.x - SIZE / 2, point.y - SIZE / 2, SIZE, SIZE);
 
     }
 

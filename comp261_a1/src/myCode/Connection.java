@@ -1,5 +1,10 @@
 package myCode;
 
+import java.awt.Graphics;
+import java.awt.Point;
+
+import codeResource.Location;
+
 /**
  * Description: <br/>
  * The Connection object represent the edge that connect two stop nodes, one for start
@@ -45,7 +50,10 @@ public class Connection {
 
     }
 
-    public void drawConnection() {
+    public void drawConnection(Graphics graphics, Location origion_location, double scale) {
+        Point fromStop_point = fromStop.getLocation().asPoint(origion_location, scale);
+        Point toStop_point = toStop.getLocation().asPoint(origion_location, scale);
+        graphics.drawLine(fromStop_point.x, fromStop_point.y, toStop_point.x, toStop_point.y);
     }
 
     /**
