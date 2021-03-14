@@ -11,14 +11,10 @@ package myCode;
  */
 public class Connection {
 
-    /**
-     * the start node
-     */
+    /** the start node */
     private Stop fromStop;
 
-    /**
-     * the end node
-     */
+    /** the end node */
     private Stop toStop;
 
     /**
@@ -26,6 +22,28 @@ public class Connection {
      * endStop.
      */
     private double weight;
+
+    /** the trip that this Connection obj belongs to */
+    private String trip_name;
+
+    /**
+     * A constructor. It construct a new instance of Connection.
+     * 
+     * @param trip
+     *            the trip that this Connection object belongs to
+     *
+     * @param fromStop
+     *            the start stop
+     * @param toStop
+     *            the end stop
+     */
+    public Connection(String trip, Stop fromStop, Stop toStop) {
+        // TODO Auto-generated constructor stub
+        this.fromStop = fromStop;
+        this.toStop = toStop;
+        this.trip_name = trip;
+
+    }
 
     /**
      * Get the fromStop.
@@ -82,6 +100,25 @@ public class Connection {
      */
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    /**
+     * Get the trip_name.
+     *
+     * @return the trip_name
+     */
+    public final String getTrip_name() {
+        return trip_name;
+    }
+
+    /**
+     * Set the trip_name.
+     *
+     * @param trip_name
+     *            the trip_name to set
+     */
+    public final void setTrip_name(String trip_name) {
+        this.trip_name = trip_name;
     }
 
 }

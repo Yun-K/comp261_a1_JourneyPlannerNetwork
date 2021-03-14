@@ -1,5 +1,7 @@
 package myCode;
 
+import java.util.List;
+
 /**
  * Description: <br/>
  * A stop object has the id, name, latitude and longitude.
@@ -29,6 +31,10 @@ public class Stop {
      */
     private double stop_lon;
 
+    /** a list of Connections for storing outgoing and incoming Connections */
+    @SuppressWarnings("javadoc")
+    private List<Connection> adj_outgoingConnections, adj_incomingConnections;
+
     /**
      * A constructor. It construct a new instance of Stop.
      *
@@ -46,6 +52,44 @@ public class Stop {
         this.stop_name = stop_name;
         this.stop_lat = stop_lat;
         this.stop_lon = stop_lon;
+    }
+
+    /**
+     * Get the adj_outgoingConnections.
+     *
+     * @return the adj_outgoingConnections
+     */
+    public List<Connection> getAdj_outgoingConnections() {
+        return adj_outgoingConnections;
+    }
+
+    /**
+     * Set the adj_outgoingConnections.
+     *
+     * @param adj_outgoingConnections
+     *            the adj_outgoingConnections to set
+     */
+    public void setAdj_outgoingConnections(List<Connection> adj_outgoingConnections) {
+        this.adj_outgoingConnections = adj_outgoingConnections;
+    }
+
+    /**
+     * Get the adj_incomingConnections.
+     *
+     * @return the adj_incomingConnections
+     */
+    public List<Connection> getAdj_incomingConnections() {
+        return adj_incomingConnections;
+    }
+
+    /**
+     * Set the adj_incomingConnections.
+     *
+     * @param adj_incomingConnections
+     *            the adj_incomingConnections to set
+     */
+    public void setAdj_incomingConnections(List<Connection> adj_incomingConnections) {
+        this.adj_incomingConnections = adj_incomingConnections;
     }
 
     /**
@@ -122,6 +166,65 @@ public class Stop {
      */
     public void setStop_lon(double stop_lon) {
         this.stop_lon = stop_lon;
+    }
+
+    /**
+     * Briefly describe the feature of the function:
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((stop_id == null) ? 0 : stop_id.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(stop_lat);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(stop_lon);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + ((stop_name == null) ? 0 : stop_name.hashCode());
+        return result;
+    }
+
+    /**
+     * Briefly describe the feature of the function:
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Stop other = (Stop) obj;
+        if (stop_id == null) {
+            if (other.stop_id != null) {
+                return false;
+            }
+        } else if (!stop_id.equals(other.stop_id)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(stop_lat) != Double.doubleToLongBits(other.stop_lat)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(stop_lon) != Double.doubleToLongBits(other.stop_lon)) {
+            return false;
+        }
+        if (stop_name == null) {
+            if (other.stop_name != null) {
+                return false;
+            }
+        } else if (!stop_name.equals(other.stop_name)) {
+            return false;
+        }
+        return true;
     }
 
 }
