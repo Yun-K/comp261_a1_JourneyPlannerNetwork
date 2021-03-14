@@ -261,6 +261,7 @@ public class Window extends GUI {
 
         origionX_Y[0] = mid_x;
         origionX_Y[1] = mid_y;
+        System.out.println("\nmidX:" + mid_x + "\nmidY: " + mid_y);
         return origionX_Y;
 
     }
