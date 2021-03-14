@@ -25,7 +25,17 @@ import codeResource.Location;
  */
 public class Window extends GUI {
 
-    private static final double SCALE = 44;
+    static {
+        id_stops_map = new HashMap<String, Stop>();
+        id_trips_map = new HashMap<String, Trip>();
+        all_connections = new ArrayList<Connection>();
+        origion_location = new Location(0, 0);
+    }
+
+    /** the scale var for zooming */
+    private static final double SCALE = 40;
+
+    private static final int ORIGIN_MOVEMENT_AMOUNT = 80;
 
     /**
      * each id map to the assosiated Stop object
@@ -40,13 +50,7 @@ public class Window extends GUI {
     /** for storing all connections between all stops */
     public static List<Connection> all_connections;
 
-    private Location origion_location;
-
-    static {
-        id_stops_map = new HashMap<String, Stop>();
-        id_trips_map = new HashMap<String, Trip>();
-        all_connections = new ArrayList<Connection>();
-    }
+    private static Location origion_location;
 
     @Override
     protected void redraw(Graphics g) {
@@ -54,7 +58,7 @@ public class Window extends GUI {
         // calculate the origional location and assign it
         // this.origation_location = new Location(calculateOrigion()[0],
         // calculateOrigion()[1]);
-        this.origion_location = new Location(0, 0);
+
         for (Stop stop : id_stops_map.values()) {
             g.setColor(Color.BLUE);
             stop.drawStop(g, origion_location, SCALE);
@@ -82,14 +86,45 @@ public class Window extends GUI {
     @Override
     protected void onMove(Move m) {
         // TODO Auto-generated method stub
+        switch (m) {
+        case NORTH:
+            origion_location = origion_location.moveBy(0, ORIGIN_MOVEMENT_AMOUNT /
+                    SCALE);
+
+            break;
+
+        case SOUTH:
+            origion_location = origion_location.moveBy(0, -ORIGIN_MOVEMENT_AMOUNT /
+                    SCALE);
+
+            break;
+
+        case EAST:
+            origion_location = origion_location.moveBy(ORIGIN_MOVEMENT_AMOUNT / SCALE,
+                    0);
+
+            break;
+        case WEST:
+            origion_location = origion_location.moveBy(-ORIGIN_MOVEMENT_AMOUNT / SCALE,
+                    0);
+
+            break;
+        case ZOOM_IN:
+
+            break;
+        case ZOOM_OUT:
+
+            break;
+
+        default:
+            break;
+        }
 
     }
 
     @Override
     protected void onLoad(File stopFile, File tripFile) {
-        // id_stops_map = new HashMap<String, Stop>();
-        // id_trips_map = new HashMap<String, Trip>();
-        // all_connections = new ArrayList<Connection>();
+
         // call two methods to load the file
         readStopFile(stopFile);
         readTripFile(tripFile);
