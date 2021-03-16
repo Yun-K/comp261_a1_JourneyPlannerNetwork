@@ -28,15 +28,16 @@ public class Window extends GUI {
         id_stops_map = new HashMap<String, Stop>();
         id_trips_map = new HashMap<String, Trip>();
         all_connections = new ArrayList<Connection>();
-        origion_location = new Location(0, 0);
+        // origion_location = new Location(0, 0);
     }
 
     /** variable for zooming in/out */
-    private double ZOOM = 1.08, SCALE;
+    private double ZOOM = 1.08, SCALE = 25.041;
 
     /** coordinate variables */
     private double min_x = Double.POSITIVE_INFINITY, min_y = Double.POSITIVE_INFINITY,
-            max_x = Double.NEGATIVE_INFINITY, max_y = Double.NEGATIVE_INFINITY;
+            max_x = Double.NEGATIVE_INFINITY, max_y = Double.NEGATIVE_INFINITY, map_width,
+            map_height;
 
     /**
      * each id map to the assosiated Stop object
@@ -95,29 +96,27 @@ public class Window extends GUI {
      */
     @Override
     protected void onMove(Move m) {
-
-        // FOR W/A/S/D:
-        // the dy and dx is the constant which is the movementValue divided by the SCALE
-        final int movement_value = 80;
-        double dx = movement_value / SCALE;
-        double dy = movement_value / SCALE;
+        // for zooming
+        double dx = (map_width - (map_width / ZOOM)) / 2;
+        double dy = (map_height - (map_height / ZOOM)) / 2;
+        // System.out.println("dy:" + dy + "\ndx:" + dx);
         switch (m) {
         case NORTH:
-            origion_location = origion_location.moveBy(0, dy);
+            origion_location = origion_location.moveBy(0, 1);
 
             break;
 
         case SOUTH:
-            origion_location = origion_location.moveBy(0, -dy);
+            origion_location = origion_location.moveBy(0, -1);
 
             break;
 
         case EAST:
-            origion_location = origion_location.moveBy(dx, 0);
+            origion_location = origion_location.moveBy(1, 0);
 
             break;
         case WEST:
-            origion_location = origion_location.moveBy(-dx, 0);
+            origion_location = origion_location.moveBy(-1, 0);
 
             break;
         /*
@@ -127,11 +126,11 @@ public class Window extends GUI {
          */
         case ZOOM_IN:
             SCALE *= ZOOM;// set up the scale first
-
+            origion_location = origion_location.moveBy(dx, dy);
             break;
         case ZOOM_OUT:
             SCALE /= ZOOM;// set up the scale first
-
+            origion_location = origion_location.moveBy(dx, dy);
             break;
         }
 
@@ -143,6 +142,7 @@ public class Window extends GUI {
         // call two methods to load the file
         readStopFile(stopFile);
         readTripFile(tripFile);
+        calculateOrigion();
 
     }
 
@@ -301,9 +301,18 @@ public class Window extends GUI {
             }
         }
 
+        map_width = max_x - min_x;
+        map_height = max_y - min_y;
+
         // calculate the mid point which is the origion
-        // double mid_x = min_x + ((max_x - min_x) / 2);
-        // double mid_y = min_y + ((max_y - min_y) / 2);
+        double mid_x = min_x + map_width / 2;
+        double mid_y = min_y + map_height / 2;
+
+        origion_location = new Location(mid_x, mid_y);
+        // System.out.println(
+        // "left: " + min_x + "\nright: " + max_x + "\ntop: " + max_y + "\nbottom: " +
+        // min_y);
+        // System.out.println("scale: " + SCALE);// debug
 
     }
 

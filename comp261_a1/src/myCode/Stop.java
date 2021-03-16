@@ -93,7 +93,7 @@ public class Stop {
         }
         // set the x, y pos to -3 and the size of rect to be 6, so that the stop_point is
         // at the center of the rect
-        graphics.fillRect(stop_point.x - 3, stop_point.y - 3, 6, 6);
+        graphics.fillRect(stop_point.x - 3 / 2, stop_point.y - 3 / 2, 6 / 2, 6 / 2);
 
     }
 
