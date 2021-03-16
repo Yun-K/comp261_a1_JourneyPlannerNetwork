@@ -30,7 +30,7 @@ public class Connection {
     private double weight;
 
     /** the trip that this Connection obj belongs to */
-    private String trip_name;
+    private String trip_id;
 
     /**
      * variable for marking whether the Connection has been highlighted or not.
@@ -40,7 +40,7 @@ public class Connection {
     /**
      * A constructor. It construct a new instance of Connection.
      * 
-     * @param trip
+     * @param trip_id
      *            the trip that this Connection object belongs to
      *
      * @param fromStop
@@ -48,11 +48,11 @@ public class Connection {
      * @param toStop
      *            the end stop
      */
-    public Connection(String trip, Stop fromStop, Stop toStop) {
+    public Connection(String trip_id, Stop fromStop, Stop toStop) {
         // TODO Auto-generated constructor stub
         this.fromStop = fromStop;
         this.toStop = toStop;
-        this.trip_name = trip;
+        this.trip_id = trip_id;
 
         this.isHighLighted = false;
 
@@ -148,7 +148,7 @@ public class Connection {
      * @return the trip_name
      */
     public final String getTrip_name() {
-        return trip_name;
+        return trip_id;
     }
 
     /**
@@ -158,7 +158,7 @@ public class Connection {
      *            the trip_name to set
      */
     public final void setTrip_name(String trip_name) {
-        this.trip_name = trip_name;
+        this.trip_id = trip_name;
     }
 
     /**
@@ -178,6 +178,15 @@ public class Connection {
      */
     public void setHighLighted(boolean isHighLighted) {
         this.isHighLighted = isHighLighted;
+    }
+
+    /**
+     * Get the trip_id.
+     *
+     * @return the trip_id
+     */
+    public String getTrip_id() {
+        return trip_id;
     }
 
 }
