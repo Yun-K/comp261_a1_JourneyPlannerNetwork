@@ -31,8 +31,12 @@ public class Window extends GUI {
         origion_location = new Location(0, 0);
     }
 
-    /** the scale var for zooming */
-    private static double SCALE = 40;
+    /** variable for zooming in/out */
+    private double ZOOM = 1.08, SCALE;
+
+    /** coordinate variables */
+    private double min_x = Double.POSITIVE_INFINITY, min_y = Double.POSITIVE_INFINITY,
+            max_x = Double.NEGATIVE_INFINITY, max_y = Double.NEGATIVE_INFINITY;
 
     /**
      * each id map to the assosiated Stop object
@@ -91,8 +95,6 @@ public class Window extends GUI {
      */
     @Override
     protected void onMove(Move m) {
-        // the zoom variable for zooming in/out
-        double ZOOM = 1.08;
 
         // FOR W/A/S/D:
         // the dy and dx is the constant which is the movementValue divided by the SCALE
@@ -282,11 +284,7 @@ public class Window extends GUI {
      * @author Yun Zhou
      * @return the array of the x_y value in decimal
      */
-    private double[] calculateOrigion() {
-        // TODO Auto-generated method stub
-        double[] origionX_Y = new double[2];
-        double min_x = Double.POSITIVE_INFINITY, min_y = Double.POSITIVE_INFINITY,
-                max_x = Double.NEGATIVE_INFINITY, max_y = Double.NEGATIVE_INFINITY;
+    private void calculateOrigion() {
 
         // get the minX,minY,maxX,maxY
         for (Stop stop : id_stops_map.values()) {
@@ -304,13 +302,8 @@ public class Window extends GUI {
         }
 
         // calculate the mid point which is the origion
-        double mid_x = min_x + ((max_x - min_x) / 2);
-        double mid_y = min_y + ((max_y - min_y) / 2);
-
-        origionX_Y[0] = mid_x;
-        origionX_Y[1] = mid_y;
-        System.out.println("\nmidX:" + mid_x + "\nmidY: " + mid_y);
-        return origionX_Y;
+        // double mid_x = min_x + ((max_x - min_x) / 2);
+        // double mid_y = min_y + ((max_y - min_y) / 2);
 
     }
 
