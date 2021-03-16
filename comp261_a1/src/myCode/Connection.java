@@ -1,5 +1,6 @@
 package myCode;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
@@ -32,6 +33,11 @@ public class Connection {
     private String trip_name;
 
     /**
+     * variable for marking whether the Connection has been highlighted or not.
+     */
+    private boolean isHighLighted;
+
+    /**
      * A constructor. It construct a new instance of Connection.
      * 
      * @param trip
@@ -48,11 +54,34 @@ public class Connection {
         this.toStop = toStop;
         this.trip_name = trip;
 
+        this.isHighLighted = false;
+
     }
 
+    /**
+     * Description: <br/>
+     * Method for drawing Connections on the window.
+     * 
+     * @author Yun Zhou
+     * @param graphics
+     *            the Graphic obj that will be drawn on
+     * @param origion_location
+     *            the origion of the graph
+     * @param scale
+     *            the scale for zooming
+     */
     public void drawConnection(Graphics graphics, Location origion_location, double scale) {
         Point fromStop_point = fromStop.getLocation().asPoint(origion_location, scale);
         Point toStop_point = toStop.getLocation().asPoint(origion_location, scale);
+
+        // set the color and draw the line
+        graphics.setColor(Color.DARK_GRAY);
+
+        // if it's highlighted, then change the color
+        if (isHighLighted) {
+            graphics.setColor(Color.RED);
+        }
+
         graphics.drawLine(fromStop_point.x, fromStop_point.y, toStop_point.x, toStop_point.y);
     }
 
@@ -130,6 +159,25 @@ public class Connection {
      */
     public final void setTrip_name(String trip_name) {
         this.trip_name = trip_name;
+    }
+
+    /**
+     * Get the isHighLighted.
+     *
+     * @return the isHighLighted
+     */
+    public boolean isHighLighted() {
+        return isHighLighted;
+    }
+
+    /**
+     * Set the isHighLighted.
+     *
+     * @param isHighLighted
+     *            the isHighLighted to set
+     */
+    public void setHighLighted(boolean isHighLighted) {
+        this.isHighLighted = isHighLighted;
     }
 
 }

@@ -1,6 +1,5 @@
 package myCode;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -33,9 +32,7 @@ public class Window extends GUI {
     }
 
     /** the scale var for zooming */
-    private static final double SCALE = 40;
-
-    private static final int ORIGIN_MOVEMENT_AMOUNT = 80;
+    private static double SCALE = 40;
 
     /**
      * each id map to the assosiated Stop object
@@ -60,12 +57,11 @@ public class Window extends GUI {
         // calculateOrigion()[1]);
 
         for (Stop stop : id_stops_map.values()) {
-            g.setColor(Color.BLUE);
+
             stop.drawStop(g, origion_location, SCALE);
         }
 
         for (Connection connection : all_connections) {
-            g.setColor(Color.DARK_GRAY);
             connection.drawConnection(g, origion_location, SCALE);
         }
 
@@ -83,40 +79,57 @@ public class Window extends GUI {
 
     }
 
+    /**
+     * each value in the Move ENUM has the corresponding situation, so use the Switch loop
+     * to switch.
+     * <p>
+     * When the onMove method has been traiggered, the redraw method will be called, and
+     * the redraw method is based on the origion, so, the movement on the Graphics is the
+     * movement on the Origion_location.
+     * 
+     * @see codeResource.GUI#onMove(codeResource.GUI.Move)
+     */
     @Override
     protected void onMove(Move m) {
-        // TODO Auto-generated method stub
+        // the zoom variable for zooming in/out
+        double ZOOM = 1.08;
+
+        // FOR W/A/S/D:
+        // the dy and dx is the constant which is the movementValue divided by the SCALE
+        final int movement_value = 80;
+        double dx = movement_value / SCALE;
+        double dy = movement_value / SCALE;
         switch (m) {
         case NORTH:
-            origion_location = origion_location.moveBy(0, ORIGIN_MOVEMENT_AMOUNT /
-                    SCALE);
+            origion_location = origion_location.moveBy(0, dy);
 
             break;
 
         case SOUTH:
-            origion_location = origion_location.moveBy(0, -ORIGIN_MOVEMENT_AMOUNT /
-                    SCALE);
+            origion_location = origion_location.moveBy(0, -dy);
 
             break;
 
         case EAST:
-            origion_location = origion_location.moveBy(ORIGIN_MOVEMENT_AMOUNT / SCALE,
-                    0);
+            origion_location = origion_location.moveBy(dx, 0);
 
             break;
         case WEST:
-            origion_location = origion_location.moveBy(-ORIGIN_MOVEMENT_AMOUNT / SCALE,
-                    0);
+            origion_location = origion_location.moveBy(-dx, 0);
 
             break;
+        /*
+         * for zooming, the scale should be changed. Also, the dy,dx for origion are
+         * entirely different
+         * 
+         */
         case ZOOM_IN:
+            SCALE *= ZOOM;// set up the scale first
 
             break;
         case ZOOM_OUT:
+            SCALE /= ZOOM;// set up the scale first
 
-            break;
-
-        default:
             break;
         }
 
@@ -234,7 +247,7 @@ public class Window extends GUI {
                     Stop toStop = id_stops_map.get(stopSequence.get(i + 1));
                     Connection connection = new Connection(trip_id, fromStop, toStop);
                     // add it into the field
-                    this.all_connections.add(connection);
+                    Window.all_connections.add(connection);
 
                     // assign the outgoing and incoming Adjacent Connections to the Stop
                     // objects

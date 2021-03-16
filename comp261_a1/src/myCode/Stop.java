@@ -1,5 +1,6 @@
 package myCode;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -15,10 +16,8 @@ import codeResource.Location;
  * @version
  */
 public class Stop {
-    /**
-     * size:the size of the Stop obect
-     */
-    private static final int SIZE = 3;
+    /** the var for whether the stop is highlighted or not */
+    private boolean isHighLighted;
 
     /**
      * the id of the stop, it contains characters and numbers.
@@ -61,6 +60,8 @@ public class Stop {
         this.stop_lat = stop_lat;
         this.stop_lon = stop_lon;
 
+        this.isHighLighted = false;
+
         // for others
         location = Location.newFromLatLon(stop_lat, stop_lon);
         adj_incomingConnections = new ArrayList<Connection>();
@@ -68,11 +69,31 @@ public class Stop {
 
     }
 
+    /**
+     * Description: <br/>
+     * Method for drawing Stop on the window.
+     *
+     * @author Yun Zhou
+     * @param graphics
+     *            the Graphic obj that will be drawn on
+     * @param origionLocation
+     *            the origion of the graph
+     * @param scale
+     *            the scale for zooming
+     */
     public void drawStop(Graphics graphics, Location origionLocation, double scale) {
         // TODO Auto-generated method stub
-        Point point = location.asPoint(origionLocation, scale); // getALL point
 
-        graphics.fillRect(point.x - SIZE / 2, point.y - SIZE / 2, SIZE, SIZE);
+        Point stop_point = this.location.asPoint(origionLocation, scale); // getALL point
+        graphics.setColor(Color.BLUE);
+
+        // set the Color to Magenta if the Stop has been selected
+        if (isHighLighted) {
+            graphics.setColor(Color.MAGENTA);
+        }
+        // set the x, y pos to -3 and the size of rect to be 6, so that the stop_point is
+        // at the center of the rect
+        graphics.fillRect(stop_point.x - 3, stop_point.y - 3, 6, 6);
 
     }
 
@@ -266,6 +287,25 @@ public class Stop {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Get the isHighLighted.
+     *
+     * @return the isHighLighted
+     */
+    public boolean isHighLighted() {
+        return isHighLighted;
+    }
+
+    /**
+     * Set the isHighLighted.
+     *
+     * @param isHighLighted
+     *            the isHighLighted to set
+     */
+    public void setHighLighted(boolean isHighLighted) {
+        this.isHighLighted = isHighLighted;
     }
 
 }
