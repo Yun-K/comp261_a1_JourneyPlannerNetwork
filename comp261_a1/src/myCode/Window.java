@@ -1,6 +1,7 @@
 package myCode;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,17 +36,18 @@ public class Window extends GUI {
     private double ZOOM = 1.08, SCALE = 25.041;
 
     /** coordinate variables */
+    @SuppressWarnings("javadoc")
     private double min_x = Double.POSITIVE_INFINITY, min_y = Double.POSITIVE_INFINITY,
             max_x = Double.NEGATIVE_INFINITY, max_y = Double.NEGATIVE_INFINITY, map_width,
             map_height;
 
     /**
-     * each id map to the assosiated Stop object
+     * each stop id map to the assosiated Stop object
      */
     public static Map<String, Stop> id_stops_map;
 
     /**
-     * each id map to the assosiated trip object
+     * each trip id map to the assosiated trip object
      */
     public static Map<String, Trip> id_trips_map;
 
@@ -75,6 +77,36 @@ public class Window extends GUI {
     @Override
     protected void onClick(MouseEvent e) {
         // TODO Auto-generated method stub
+        Point clickedPoint = e.getPoint();
+        Location mouse_clicked_location = Location.newFromPoint(clickedPoint, origion_location,
+                SCALE);
+
+        // loop through all the stops to find the closest one
+        Stop closest_stop = null;
+        double closest_distance = Double.POSITIVE_INFINITY;
+        for (Stop stop : id_stops_map.values()) {
+            // if the distance if closer, then assign it
+            if (stop.getLocation().distance(mouse_clicked_location) < closest_distance) {
+                closest_distance = stop.getLocation().distance(mouse_clicked_location);
+                closest_stop = stop;
+            }
+            // reset each stop to not HighLighted
+            stop.setHighLighted(false);
+        }
+
+        // highlight the closest stop
+        closest_stop.setHighLighted(true);
+
+        // print out the name of the Stop and the id of all trips going through the stop
+        String info = "The Stop Name: " + closest_stop.getStop_name()
+                      + "\nTrip IDs that going through the Stop: \n";
+        for (Trip trip : id_trips_map.values()) {
+            List<String> stopID_through_trip = trip.getStopSequence();
+            if (stopID_through_trip.contains(closest_stop.getStop_id())) {
+                info += trip.getTrip_id() + "\n";
+            }
+        }
+        getTextOutputArea().setText(info);
 
     }
 
@@ -85,12 +117,14 @@ public class Window extends GUI {
     }
 
     /**
-     * each value in the Move ENUM has the corresponding situation, so use the Switch loop
-     * to switch.
+     * Allow the user to navigate the map, which can zooming and panning the map within
+     * use the buttons.
      * <p>
-     * When the onMove method has been traiggered, the redraw method will be called, and
-     * the redraw method is based on the origion, so, the movement on the Graphics is the
-     * movement on the Origion_location.
+     * For panning which is moving NORTH,EAST,WEST,SOUTH, the corresponding x\y value of
+     * origional_position will be increased/decreased by 1.
+     * <p>
+     * For zooming, the scale will times/divide the ZOOM variable and the
+     * origional_position will also be changed based on the prarmeters of the data graph.
      * 
      * @see codeResource.GUI#onMove(codeResource.GUI.Move)
      */
@@ -100,6 +134,9 @@ public class Window extends GUI {
         double dx = (map_width - (map_width / ZOOM)) / 2;
         double dy = (map_height - (map_height / ZOOM)) / 2;
         // System.out.println("dy:" + dy + "\ndx:" + dx);
+
+        // each value in the Move ENUM has the corresponding situation, so use the Switch
+        // loop to switch.
         switch (m) {
         case NORTH:
             origion_location = origion_location.moveBy(0, 1);
