@@ -231,6 +231,25 @@ public class Stop {
     }
 
     /**
+     * Get the isHighLighted.
+     *
+     * @return the isHighLighted
+     */
+    public boolean isHighLighted() {
+        return isHighLighted;
+    }
+
+    /**
+     * Set the isHighLighted.
+     *
+     * @param isHighLighted
+     *            the isHighLighted to set
+     */
+    public void setHighLighted(boolean isHighLighted) {
+        this.isHighLighted = isHighLighted;
+    }
+
+    /**
      * Briefly describe the feature of the function:
      * 
      * @see java.lang.Object#hashCode()
@@ -287,25 +306,6 @@ public class Stop {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Get the isHighLighted.
-     *
-     * @return the isHighLighted
-     */
-    public boolean isHighLighted() {
-        return isHighLighted;
-    }
-
-    /**
-     * Set the isHighLighted.
-     *
-     * @param isHighLighted
-     *            the isHighLighted to set
-     */
-    public void setHighLighted(boolean isHighLighted) {
-        this.isHighLighted = isHighLighted;
     }
 
 }

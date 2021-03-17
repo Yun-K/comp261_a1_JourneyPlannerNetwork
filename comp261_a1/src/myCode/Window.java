@@ -54,20 +54,20 @@ public class Window extends GUI {
     /** for storing all connections between all stops */
     public static List<Connection> all_connections;
 
+    /** the origional location on the map */
     private static Location origion_location;
 
     @Override
     protected void redraw(Graphics g) {
-
         // calculate the origional location and assign it
         // this.origation_location = new Location(calculateOrigion()[0],
         // calculateOrigion()[1]);
 
+        // draw all stops
         for (Stop stop : id_stops_map.values()) {
-
             stop.drawStop(g, origion_location, SCALE);
         }
-
+        // draw all connections
         for (Connection connection : all_connections) {
             connection.drawConnection(g, origion_location, SCALE);
         }
@@ -85,7 +85,7 @@ public class Window extends GUI {
         Stop closest_stop = null;
         double closest_distance = Double.POSITIVE_INFINITY;
         for (Stop stop : id_stops_map.values()) {
-            // if the distance if closer, then assign it
+            // if the distance is closer, then assign it
             if (stop.getLocation().distance(mouse_clicked_location) < closest_distance) {
                 closest_distance = stop.getLocation().distance(mouse_clicked_location);
                 closest_stop = stop;
@@ -108,11 +108,58 @@ public class Window extends GUI {
         }
         getTextOutputArea().setText(info);
 
+        // unhighlight all connections
+        for (Connection connection : all_connections) {
+            connection.setHighLighted(false);
+        }
     }
 
     @Override
     protected void onSearch() {
-        // TODO Auto-generated method stub
+        // find possible stops
+        String stop_name_typed = getSearchBox().getText();
+        List<Stop> possible_stops = new ArrayList<Stop>();
+        for (Stop stop : id_stops_map.values()) {
+            // unhighlight all stops first
+            stop.setHighLighted(false);
+
+            // should be replaced by the trie
+            if (stop.getStop_name().equals(stop_name_typed)) {
+                // System.out.println("find stops!!!!!!!\n");//debug
+                possible_stops.add(stop);
+                // highlight it
+                stop.setHighLighted(true);
+            }
+        }
+
+        // highlight stops in the possible_stops list as well as the connections
+        for (Connection connection : all_connections) {
+            // unhighlight all connections first
+            connection.setHighLighted(false);
+            // loop through possible stops to find the connections and highlight it
+            for (Stop p_stop : possible_stops) {
+                if (connection.getFromStop().equals(p_stop)
+                        || connection.getToStop().equals(p_stop)) {
+                    connection.setHighLighted(true);
+                }
+            }
+        }
+
+        String info = "Possible Stops and the Trip IDs:\n"; // the string that store the
+                                                            // text for printing on the
+                                                            // JTextArea
+        // print out the name of the Stop and the id of all trips going through the stop
+        for (Trip trip : id_trips_map.values()) {
+            List<String> stopID_through_trip = trip.getStopSequence();
+            for (Stop stop : possible_stops) {
+                if (stopID_through_trip.contains(stop.getStop_id())) {
+                    // add it into the info String
+                    info += "Stop Name: " + stop.getStop_name();
+                    info += "\tTrip ID: " + trip.getTrip_id() + "\n";
+                }
+            }
+        }
+        getTextOutputArea().setText(info);
 
     }
 
