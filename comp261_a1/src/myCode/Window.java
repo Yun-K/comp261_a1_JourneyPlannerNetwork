@@ -76,6 +76,9 @@ public class Window extends GUI {
 
     @Override
     protected void onClick(MouseEvent e) {
+
+        // reset stops and connections to not HighLighted
+        unHighLight_connections_stops();
         // TODO Auto-generated method stub
         Point clickedPoint = e.getPoint();
         Location mouse_clicked_location = Location.newFromPoint(clickedPoint, origion_location,
@@ -90,8 +93,7 @@ public class Window extends GUI {
                 closest_distance = stop.getLocation().distance(mouse_clicked_location);
                 closest_stop = stop;
             }
-            // reset each stop to not HighLighted
-            stop.setHighLighted(false);
+
         }
 
         // highlight the closest stop
@@ -108,21 +110,26 @@ public class Window extends GUI {
         }
         getTextOutputArea().setText(info);
 
-        // unhighlight all connections
-        for (Connection connection : all_connections) {
-            connection.setHighLighted(false);
-        }
     }
 
     @Override
     protected void onSearch() {
         // find possible stops
         String stop_name_typed = getSearchBox().getText();
+        boolean isTrieSearch = false;
+        if (isTrieSearch) {
+            trieSearch(stop_name_typed);
+        } else {
+            linearSearch(stop_name_typed);
+        }
+
+    }
+
+    private void linearSearch(String stop_name_typed) {
+        // unhighlight first
+        unHighLight_connections_stops();
         List<Stop> possible_stops = new ArrayList<Stop>();
         for (Stop stop : id_stops_map.values()) {
-            // unhighlight all stops first
-            stop.setHighLighted(false);
-
             // should be replaced by the trie
             if (stop.getStop_name().equals(stop_name_typed)) {
                 // System.out.println("find stops!!!!!!!\n");//debug
@@ -134,8 +141,6 @@ public class Window extends GUI {
 
         // highlight stops in the possible_stops list as well as the connections
         for (Connection connection : all_connections) {
-            // unhighlight all connections first
-            connection.setHighLighted(false);
             // loop through possible stops to find the connections and highlight it
             for (Stop p_stop : possible_stops) {
                 if (connection.getFromStop().equals(p_stop)
@@ -160,6 +165,30 @@ public class Window extends GUI {
             }
         }
         getTextOutputArea().setText(info);
+
+    }
+
+    private void trieSearch(String stop_name_typed) {
+        unHighLight_connections_stops();
+    }
+
+    /***
+     * Description: <br/>
+     * Method for unhighlight stops and connections. It's be called when a new click or
+     * the new Search has been traiggered.
+     * 
+     * @author Yun Zhou
+     */
+    private void unHighLight_connections_stops() {
+        // unhighlight all connections
+        for (Connection connection : all_connections) {
+            connection.setHighLighted(false);
+        }
+
+        // unhighlight all stops
+        for (Stop stop : id_stops_map.values()) {
+            stop.setHighLighted(false);
+        }
 
     }
 
