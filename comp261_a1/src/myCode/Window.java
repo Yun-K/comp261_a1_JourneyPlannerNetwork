@@ -30,7 +30,10 @@ public class Window extends GUI {
         id_trips_map = new HashMap<String, Trip>();
         all_connections = new ArrayList<Connection>();
         // origion_location = new Location(0, 0);
+        trieNode = new Trie();
     }
+
+    static Trie trieNode;
 
     /** variable for zooming in/out */
     private double ZOOM = 1.08, SCALE = 25.041;
@@ -93,7 +96,6 @@ public class Window extends GUI {
                 closest_distance = stop.getLocation().distance(mouse_clicked_location);
                 closest_stop = stop;
             }
-
         }
 
         // highlight the closest stop
@@ -116,7 +118,7 @@ public class Window extends GUI {
     protected void onSearch() {
         // find possible stops
         String stop_name_typed = getSearchBox().getText();
-        boolean isTrieSearch = false;
+        boolean isTrieSearch = true;
         if (isTrieSearch) {
             trieSearch(stop_name_typed);
         } else {
@@ -125,6 +127,78 @@ public class Window extends GUI {
 
     }
 
+    /**
+     * Description: <br/>
+     * The trie search which use the Trie data structure.
+     * 
+     * @author Yun Zhou
+     * @param stop_prefix_string
+     *            the string that typed in the JTextArea textoutputArea
+     */
+    private void trieSearch(String stop_prefix_string) {
+        unHighLight_connections_stops();
+        getTextOutputArea().setText("");
+        String info = "possible Stops:\n";
+        List<String> possible_stops_stringList = trieNode.getAll(stop_prefix_string);
+        if (possible_stops_stringList == null || possible_stops_stringList.isEmpty()) {
+            // System.out.println("FUCK");
+            return;
+        }
+
+        // highlight possible stops and add into the list in order for finding connections
+        // and trips
+        List<Stop> possibleStops = new ArrayList<Stop>();
+        for (String possibleStopName : possible_stops_stringList) {
+            // System.out.println(possibleStopName + "\n");//debug
+            for (Stop matchStop : id_stops_map.values()) {
+                if (matchStop.getStop_name().equalsIgnoreCase(possibleStopName)) {
+                    possibleStops.add(matchStop);
+                    matchStop.setHighLighted(true);
+                    info += possibleStopName + "\t";
+                }
+            }
+
+        }
+        // highlight stops in the possible_stops list as well as the connections
+        for (Connection connection : all_connections) {
+            // loop through possible stops to find the connections and highlight it
+            for (Stop p_stop : possibleStops) {
+                if (connection.getFromStop().equals(p_stop)
+                        || connection.getToStop().equals(p_stop)) {
+                    connection.setHighLighted(true);
+                }
+            }
+        }
+        //
+        // info += "\nSpecific information: \n"; // the string that store the text
+        // // for printing on the JTextArea
+        //
+        // // print out the name of the Stop and the id of all trips going through the
+        // stop
+        // for (
+        //
+        // Trip trip : id_trips_map.values()) {
+        // List<String> stopID_through_trip = trip.getStopSequence();
+        // for (Stop stop : possibleStops) {
+        // if (stopID_through_trip.contains(stop.getStop_id())) {
+        // // add it into the info String
+        // info += "Stop Name: " + stop.getStop_name();
+        // info += "\tTrip ID: " + trip.getTrip_id() + "\n";
+        // }
+        // }
+        // }
+
+        getTextOutputArea().setText(info);
+    }
+
+    /**
+     * Description: <br/>
+     * The linear search for the onSearch().
+     * 
+     * @author Yun Zhou
+     * @param stop_name_typed
+     *            the stop name that is typed in the JTextarea
+     */
     private void linearSearch(String stop_name_typed) {
         // unhighlight first
         unHighLight_connections_stops();
@@ -166,10 +240,6 @@ public class Window extends GUI {
         }
         getTextOutputArea().setText(info);
 
-    }
-
-    private void trieSearch(String stop_name_typed) {
-        unHighLight_connections_stops();
     }
 
     /***
@@ -294,6 +364,9 @@ public class Window extends GUI {
                 String[] stop_info = stop_line.split("\t");
                 String id = stop_info[0];
                 String name = stop_info[1];
+
+                trieNode.add(name);// add it into the trie data structure
+
                 double latitde = Double.valueOf(stop_info[2]);
                 double longitude = Double.valueOf(stop_info[3]);
                 // put it into the map of the id_stops map
