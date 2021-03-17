@@ -87,6 +87,14 @@ public abstract class GUI {
      */
     protected abstract void onLoad(File stopFile, File tripFile);
 
+    /**
+     * Description: <br/>
+     * It is called when the user drag the mouse on the screen.
+     * 
+     * @author Yun Zhou
+     */
+    protected abstract void onDrag(double oldX, double oldY, double newX, double newY);
+
     // here are some useful methods you'll need.
 
     /**
@@ -366,8 +374,27 @@ public abstract class GUI {
         // drawn until it is resized.
         drawing.setVisible(true);
 
+        // FOR CHALLENGE:
         drawing.addMouseListener(new MouseAdapter() {
+            private double xPos, yPos, newX, newY;
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                // TODO Auto-generated method stub
+                // onDrag(xPos,yPos,newX,newY);
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                xPos = e.getX();
+                yPos = e.getY();
+            }
+
             public void mouseReleased(MouseEvent e) {
+                newX = e.getX();
+                newY = e.getY();
+                onDrag(xPos, yPos, newX, newY);
                 onClick(e);
                 redraw();
             }
@@ -375,6 +402,14 @@ public abstract class GUI {
 
         drawing.addMouseWheelListener(new MouseAdapter() {
             public void mouseWheelMoved(MouseWheelEvent e) {
+
+                if (e.getWheelRotation() > 0) {
+                    onMove(Move.ZOOM_OUT);
+                } else if (e.getWheelRotation() < 0) {
+                    onMove(Move.ZOOM_IN);
+                }
+
+                redraw();// redraw to update the Graph
             }
         });
 

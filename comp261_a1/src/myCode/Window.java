@@ -78,6 +78,13 @@ public class Window extends GUI {
     }
 
     @Override
+    protected void onDrag(double oldX, double oldY, double newX, double newY) {
+        // MOVE THE origion by the parameter and the Scale
+        origion_location = origion_location.moveBy((newX - oldX) / SCALE * -1,
+                (newY - oldY) / SCALE);
+    }
+
+    @Override
     protected void onClick(MouseEvent e) {
 
         // reset stops and connections to not HighLighted
