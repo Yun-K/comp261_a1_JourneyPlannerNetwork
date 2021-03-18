@@ -105,6 +105,12 @@ public class Trie {
         if (prefix_string.isEmpty()) {
             return null;
         }
+        // List<String> fullMatchList = get(prefix_string);
+        // if (fullMatchList != null) {
+        // if (fullMatchList.isEmpty()) {
+        // return fullMatchList;
+        // }
+        // }
 
         Trie currentNode = this;// set the object who call this method to the rootNode
 

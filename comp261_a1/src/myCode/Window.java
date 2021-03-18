@@ -148,7 +148,7 @@ public class Window extends GUI {
         String info = "possible Stops:\n";
         List<String> possible_stops_stringList = trieNode.getAll(stop_prefix_string);
         if (possible_stops_stringList == null || possible_stops_stringList.isEmpty()) {
-            // System.out.println("FUCK");
+            System.out.println("FUCK");
             return;
         }
 

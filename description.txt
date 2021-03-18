@@ -1,0 +1,18 @@
+Name: Yun Zhou
+ID:   300442776
+
+I finish the minimum, core, Completion and a part of the GUI improvement which is the mouse panning and zooming.
+It can draw connections, stops, highlight nearest stop when the mouse click on the graph, highlight possible connections and stops when typing in the search box. Also, the info will be printed on the JTextArea.
+When the mousewheel has been used, it can zooming in/out, when the mouse is dragged, the map will be moved by the mouse based on move the origin.
+
+
+The entrance of my application is in the Main class which is in the main package. For the applied classes are in the codeResource package and for my code is in the myCode package.
+For the main implemention is in the Window class which it extends GUI.
+
+I use the data stracture HashMap to store the stops,trips and I use the ArrayList to store all connections.
+In the Stop class, i have 2 adjacent list for storing outgoingConnections and incomingConnections.
+In Connection class, i have the field called trip_id which store that the trip that this connection belongs to.
+
+The Trie class is the data stractue for the trie search, the code is based on the pseudo code in slides.
+
+
