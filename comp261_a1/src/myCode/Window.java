@@ -251,8 +251,8 @@ public class Window extends GUI {
 
     /***
      * Description: <br/>
-     * Method for unhighlight stops and connections. It's be called when a new click or
-     * the new Search has been traiggered.
+     * Method for unhighlight stops and connections. It's be called when a new click or the new
+     * Search has been traiggered.
      * 
      * @author Yun Zhou
      */
@@ -270,14 +270,14 @@ public class Window extends GUI {
     }
 
     /**
-     * Allow the user to navigate the map, which can zooming and panning the map within
-     * use the buttons.
+     * Allow the user to navigate the map, which can zooming and panning the map within use the
+     * buttons.
      * <p>
      * For panning which is moving NORTH,EAST,WEST,SOUTH, the corresponding x\y value of
      * origional_position will be increased/decreased by 1.
      * <p>
-     * For zooming, the scale will times/divide the ZOOM variable and the
-     * origional_position will also be changed based on the prarmeters of the data graph.
+     * For zooming, the scale will times/divide the ZOOM variable and the origional_position
+     * will also be changed based on the prarmeters of the data graph.
      * 
      * @see codeResource.GUI#onMove(codeResource.GUI.Move)
      */
@@ -310,8 +310,8 @@ public class Window extends GUI {
 
             break;
         /*
-         * for zooming, the scale should be changed. Also, the dy,dx for origion are
-         * entirely different
+         * for zooming, the scale should be changed. Also, the dy,dx for origion are entirely
+         * different
          * 
          */
         case ZOOM_IN:
@@ -356,8 +356,8 @@ public class Window extends GUI {
             String stop_line = bReader.readLine();
 
             /*
-             * keep reading the txt file until the end of thestream has been reached
-             * without reading any characters
+             * keep reading the txt file until the end of thestream has been reached without
+             * reading any characters
              */
             while (stop_line != null) {
                 stop_line = bReader.readLine();
@@ -408,7 +408,7 @@ public class Window extends GUI {
 
             /*
              * keep reading the txt file until the end of thestream has been reached
-             * without reading any characters
+             *
              */
             while (trip_line != null) {
                 trip_line = bReader.readLine();
